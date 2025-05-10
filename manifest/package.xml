@@ -1,12 +1,30 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
 	<types>
-		<members>Activity.Interview_Date_Time__c</members>
-		<members>Activity.Interview_Format__c</members>
-		<members>Activity.Interview_Notes__c</members>
-		<members>Activity.Interview_Type__c</members>
-		<members>Activity.Interviewer__c</members>
+		<members>Activity.Job_Application__c</members>
+		<members>Contact.Job_Application__c</members>
+		<members>Job_Application__c.Application_Date__c</members>
+		<members>Job_Application__c.Bi_annual_Pay__c</members>
+		<members>Job_Application__c.Bi_weekly_Pay__c</members>
+		<members>Job_Application__c.CompanyName__c</members>
+		<members>Job_Application__c.Description__c</members>
+		<members>Job_Application__c.Federal_Income_Tax__c</members>
+		<members>Job_Application__c.Follow_up_Date__c</members>
+		<members>Job_Application__c.Location__c</members>
+		<members>Job_Application__c.Medicare_Withholding__c</members>
+		<members>Job_Application__c.Monthly_Take_home_Pay__c</members>
+		<members>Job_Application__c.Notes__c</members>
+		<members>Job_Application__c.Position__c</members>
+		<members>Job_Application__c.PrimaryContact__c</members>
+		<members>Job_Application__c.Rating__c</members>
+		<members>Job_Application__c.Salary__c</members>
+		<members>Job_Application__c.Social_Security__c</members>
+		<members>Job_Application__c.Status__c</members>
 		<name>CustomField</name>
+	</types>
+	<types>
+		<members>Job_Application__c</members>
+		<name>CustomObject</name>
 	</types>
 	<version>63.0</version>
 </Package>
