@@ -11,5 +11,9 @@
 		<members>Job_Application__c</members>
 		<name>CustomObject</name>
 	</types>
+	<types>
+		<members>Job_Application__c.noStatusChange</members>
+		<name>ValidationRule</name>
+	</types>
 	<version>63.0</version>
 </Package>
