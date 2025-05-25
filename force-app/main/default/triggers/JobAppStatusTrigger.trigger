@@ -8,4 +8,8 @@ trigger JobAppStatusTrigger on Job_Application__c (before insert,before update,a
     if (Trigger.isAfter) {
          JobAppStatusHandler.createTasksForStatus(Trigger.new);
          }
+
+   if(Trigger.isbefore){
+      TakehomePayEstimatorHandler.calcTakehomePay(trigger.new,trigger.isUpdate ? Trigger.oldMap : null);
+   }
 }

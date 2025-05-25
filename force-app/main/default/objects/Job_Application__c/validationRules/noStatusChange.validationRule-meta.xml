@@ -10,11 +10,13 @@
 
 &quot;Applied&quot;,3,
 
-&quot;Negotiating&quot;,4,
+&quot;Interviewing&quot;,4,
 
-&quot;Accepted&quot;,5,
+&quot;Negotiating&quot;,5,
 
-&quot;Closed&quot;,6,0)&lt;
+&quot;Accepted&quot;,6,
+
+&quot;Closed&quot;,7,0)&lt;
 
 CASE(PRIORVALUE( Status__c ),
 
@@ -24,10 +26,12 @@ CASE(PRIORVALUE( Status__c ),
 
 &quot;Applied&quot;,3,
 
-&quot;Negotiating&quot;,4,
+&quot;Interviewing&quot;,4,
 
-&quot;Accepted&quot;,5,
+&quot;Negotiating&quot;,5,
 
-&quot;Closed&quot;,6,0)</errorConditionFormula>
+&quot;Accepted&quot;,6,
+
+&quot;Closed&quot;,7,0)</errorConditionFormula>
     <errorMessage>You cannot move your status backswards</errorMessage>
 </ValidationRule>

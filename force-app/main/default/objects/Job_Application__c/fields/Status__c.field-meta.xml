@@ -26,6 +26,11 @@
                 <label>APPLIED</label>
             </value>
             <value>
+                <fullName>INTERVIEWING</fullName>
+                <default>false</default>
+                <label>INTERVIEWING</label>
+            </value>
+            <value>
                 <fullName>NEGOTIATING</fullName>
                 <default>false</default>
                 <label>NEGOTIATING</label>
