@@ -1,0 +1,65 @@
+<template>
+    <div class="slds-text-heading_x-large slds-text-title_bold slds-text-title_caps slds-m-bottom_medium">
+        Take Home Pay Estimator
+    </div>
+
+    <!-- Two-column layout using SLDS grid -->
+    <div class="slds-grid slds-gutters slds-p-horizontal_large">
+        <!-- Left Column - Annual -->
+        <div class="slds-col slds-size_1-of-2">
+            <lightning-card title="Annual Salary Calculations">
+                <lightning-button label="Calculate" title="Calculate" slot="actions"></lightning-button>
+
+                <lightning-record-view-form
+                    object-api-name="Job_Application__c"
+                    record-id={recordId}>
+
+                    <div class="slds-grid slds-wrap slds-gutters">
+                        <div class="slds-col slds-size_1-of-1">
+                            <lightning-output-field field-name="Salary__c"></lightning-output-field>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1">
+                            <lightning-output-field field-name="Federal_Income_Tax__c"></lightning-output-field>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1">
+                            <lightning-output-field field-name="Medicare_Withholding__c"></lightning-output-field>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1">
+                            <lightning-output-field field-name="Social_Security__c"></lightning-output-field>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1">
+                            <lightning-output-field field-name="Yearly_Take_home_Pay__c"></lightning-output-field>
+                        </div>
+                    </div>
+
+                </lightning-record-view-form>
+
+                <p slot="footer">Final Annual Calc</p>
+            </lightning-card>
+        </div>
+
+        <!-- Right Column - Monthly -->
+        <div class="slds-col slds-size_1-of-2">
+            <lightning-card title="Monthly Salary Calculations">
+                <!-- Add your monthly fields here -->
+                <lightning-record-view-form
+                    object-api-name="Job_Application__c"
+                    record-id={recordId}>
+                    
+                    <div class="slds-grid slds-wrap slds-gutters">
+                        <!-- Example placeholder fields for monthly values -->
+                        <div class="slds-col slds-size_1-of-1">
+                            <lightning-output-field field-name="Monthly_Salary__c"></lightning-output-field>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1">
+                            <lightning-output-field field-name="Monthly_Take_Home__c"></lightning-output-field>
+                        </div>
+                    </div>
+
+                </lightning-record-view-form>
+
+                <p slot="footer">Final Monthly Calc</p>
+            </lightning-card>
+        </div>
+    </div>
+</template>
