@@ -39,7 +39,7 @@ public with sharing class JobAppStatusHandlerTest {
     }
 
 
-@isTest
+    @isTest
     static void testEmptyJobApplicationList() {
         // Create an empty list of Job_Application__c records
         List<Job_Application__c> jobApps = new List<Job_Application__c>();
@@ -56,4 +56,6 @@ public with sharing class JobAppStatusHandlerTest {
         // Assert that no tasks are created
         System.assertEquals(0, savedTasks.size(), 'Expected no tasks to be created for an empty job application list');
     }
+
+
 }

@@ -14,6 +14,10 @@
 	</types>
 	<types>
 		<members>Job_Application__c</members>
+		<members>Medicare_Settings__mdt</members>
+		<members>Social_Security_Settings__mdt</members>
+		<members>Standard_Deduction__mdt</members>
+		<members>Tax_Bracket__mdt</members>
 		<name>CustomObject</name>
 	</types>
 	<types>

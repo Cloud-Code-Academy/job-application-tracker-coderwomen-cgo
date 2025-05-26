@@ -63,5 +63,10 @@ public class FollowupFieldUpdateTest {
 
             system.Assert.areEqual(preDate, newJobApps[0].Follow_up_Date__c);
             system.Assert.areEqual(preDate, newJobApps[1].Follow_up_Date__c);
-}
+    }
+
+    @isTest
+    static void testUpdatedJobAppWithSavedStatus(){
+        
+    }
 }
