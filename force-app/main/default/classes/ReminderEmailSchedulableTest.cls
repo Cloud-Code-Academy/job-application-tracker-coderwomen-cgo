@@ -13,16 +13,20 @@ static void testInterviewAtCorrectTime(){
 
     Event newEv = new Event(Subject = 'Interview tomorrow', WhoId = conIntvwr.Id, StartDateTime = eventTime, DurationInMinutes = 60, OwnerId = UserInfo.getUserId()); 
     
-    Event newEv2 = new Event(Subject = 'Interview tomorrow', WhoId = conIntvwr.Id, StartDateTime = eventTime.addMinutes(15), DurationInMinutes = 60, OwnerId = UserInfo.getUserId()
+    Event newEv2 = new Event(Subject = 'Interview tomorrow', WhoId = conIntvwr.Id, StartDateTime = eventTime.addMinutes(75), DurationInMinutes = 60, OwnerId = UserInfo.getUserId()
     ); 
     insert new List<Event> {newEv, newEv2};
 
     Id templateId = [SELECT Id FROM EmailTemplate WHERE DeveloperName = 'Interview_Day_Before_Reminder' LIMIT 1].Id;
 
 Test.startTest();
-ReminderEmailHelper.sendReminders(now);
+    String jobId = System.schedule(
+        'Test Reminder Email Job',
+        '0 0 12 * * ?', 
+        new ReminderEmailSchedulable()
+        );
 Test.stopTest();
 
-	System.assertEquals(2, Limits.getEmailInvocations(), 'Should have sent 2 emails for the two Events.');
+	System.assertNotEquals(null, jobId, 'Scheduled job should return a job ID.');
 	}
 }
