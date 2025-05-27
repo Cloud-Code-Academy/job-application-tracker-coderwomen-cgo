@@ -1,4 +1,3 @@
-
 @isTest
 public with sharing class JobAppStatusHandlerTest {
 
@@ -8,11 +7,12 @@ public with sharing class JobAppStatusHandlerTest {
         for (Integer i = 0; i < 4; i++) {
             jobApps.add(new Job_Application__c());  
         }
-        insert jobApps;
+        
         
         Test.startTest();
-        JobAppStatusHandler.createTasksForStatus(jobApps);
+        insert jobApps;
         Test.stopTest();
+
         List<Task> savedTasks = [SELECT Id, Status, WhatId, ActivityDate, Subject FROM Task WHERE WhatId IN :jobApps];
         
         System.assertEquals(12, savedTasks.size(), 'Expected 12 tasks to be created');
@@ -27,6 +27,8 @@ public with sharing class JobAppStatusHandlerTest {
         }
         insert newJobs;
         
+        Map<Id, Job_Application__c> oldJobApps = new Map<Id, Job_Application__c>(newJobs);
+
         Test.startTest();
         for(Job_Application__c  ja: newJobs){
             ja.Status__c = 'Applying';
@@ -41,21 +43,33 @@ public with sharing class JobAppStatusHandlerTest {
 
     @isTest
     static void testEmptyJobApplicationList() {
-        // Create an empty list of Job_Application__c records
         List<Job_Application__c> jobApps = new List<Job_Application__c>();
-
-        // Start test context
+        insert jobApps;
         Test.startTest();
-        JobAppStatusHandler.createTasksForStatus(jobApps);
-       
+       JobAppStatusHandler.createTasksForStatus(jobApps,null);
         Test.stopTest();
 
-        // Query for any tasks that might have been created
         List<Task> savedTasks = [SELECT Id FROM Task WHERE WhatId IN :jobApps];
 
-        // Assert that no tasks are created
         System.assertEquals(0, savedTasks.size(), 'Expected no tasks to be created for an empty job application list');
     }
 
+    @isTest
+    static void testCreateTasksForStatusNoStatusChange() {
+        List<Job_Application__c> jobApps =  new List<Job_Application__c>();
+        for (Integer i = 0; i < 2; i++) {
+           jobApps.add(new Job_Application__c());
+        }
+        insert jobApps;
+        jobApps[0].Description__c = 'Updated description';  
+
+        Test.startTest();
+        update jobApps; // No tasks should be created.
+        Test.stopTest();
+
+        List<Task> tasks = [SELECT Id FROM Task WHERE WhatId IN :jobApps];
+        System.assertEquals(6, tasks.size(), 'There should be only 6 tasks');
+    }
+ 
 
 }
