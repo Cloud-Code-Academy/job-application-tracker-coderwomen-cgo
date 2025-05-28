@@ -6,7 +6,7 @@ trigger JobAppStatusTrigger on Job_Application__c (before insert,before update,a
     }
     
     if (Trigger.isAfter) {
-         JobAppStatusHandler.createTasksForStatus(Trigger.new);
+         JobAppStatusHandler.createTasksForStatus(Trigger.new, Trigger.oldMap);
          }
 
    if(Trigger.isbefore){
