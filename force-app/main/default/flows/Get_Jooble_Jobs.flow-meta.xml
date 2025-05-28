@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <actionCalls>
-        <description>Input Keyword &amp; location to pull up relevant jobs</description>
+        <description>Input Keyword &amp; location to pull up relevant jobs.</description>
         <name>Get_Jooble_Jobs</name>
         <label>Get Jooble Jobs</label>
         <locationX>176</locationX>
@@ -32,7 +32,6 @@
             <stringValue>{&quot;location&quot;:&quot;top&quot;,&quot;type&quot;:&quot;simple&quot;}</stringValue>
         </value>
     </customProperties>
-    <description>Invocable Action that calls into Jooble &amp; creates jobs</description>
     <environments>Default</environments>
     <interviewLabel>Get Jooble Jobs {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Get Jooble Jobs</label>
@@ -56,8 +55,8 @@
     </processMetadataValues>
     <processType>Flow</processType>
     <screens>
-        <name>What_kind_of_Job_Where</name>
-        <label>What kind of Job &amp; Where</label>
+        <name>What_Kind_of_Job_Where</name>
+        <label>What Kind of Job &amp; Where</label>
         <locationX>176</locationX>
         <locationY>134</locationY>
         <allowBack>true</allowBack>
@@ -89,7 +88,7 @@
         <locationX>50</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>What_kind_of_Job_Where</targetReference>
+            <targetReference>What_Kind_of_Job_Where</targetReference>
         </connector>
     </start>
     <status>Active</status>

@@ -17,7 +17,7 @@ public with sharing class HttpRequestToJooble {
         JobInputs input = inputs[0];
 
         String url = 'https://jooble.org/api/';
-        String key = '74c44e65-5ebf-405d-aeea-7bd57c24c5b5';
+        String key = '21eb451a-81e6-478c-b219-9691fe4b4636';
         
         String requestBody = JSON.serialize(new Map<String, String>{
                 'keywords' => input.keywordInput,

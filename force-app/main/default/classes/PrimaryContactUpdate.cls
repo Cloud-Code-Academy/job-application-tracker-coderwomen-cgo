@@ -2,7 +2,7 @@ public with sharing class PrimaryContactUpdate {
      public static void primaryContactFieldUpdate(List<Job_Application__c> jobApplications) {
             List<Job_Application__c> jobAppsNoPc = new List<Job_Application__c>();
         for (Job_Application__c jobApp : jobApplications) {
-            if (jobApp.Primary_Contact__c == null && jobApp.CompanyName__c != null) {
+            if (jobApp.Primary_Contact__c == null ) {
                 jobAppsNoPc.add(jobApp);
             }
         }

@@ -80,23 +80,23 @@ public class StaleJobAppScheduleTest{
        ja.Follow_Up_Date__c = Date.today().addDays(4);
        update ja; 
     
-      Job_Application__History staleJobs = [
-    SELECT ParentId, CreatedDate
-      FROM Job_Application__History
-     WHERE ParentId = :ja.Id
-        AND  Field = 'Follow_Up_Date__c'
-         ORDER BY CreatedDate DESC
-        LIMIT 1
-];
-    //    Job_Application__History hist = [
-    //         SELECT CreatedDate
-    //           FROM Job_Application__History
-    //          WHERE ParentId = :ja.Id
-    //            AND Field    = 'Follow_Up_Date__c'
-    //          ORDER BY CreatedDate DESC
-    //          LIMIT 1
-    //     ];
-        Datetime oldDate = staleJobs.CreatedDate.addDays(31);
+//       Job_Application__History staleJobs = [
+//     SELECT ParentId, CreatedDate
+//       FROM Job_Application__History
+//      WHERE ParentId = :ja.Id
+//         AND  Field = 'Follow_Up_Date__c'
+//          ORDER BY CreatedDate DESC
+//         LIMIT 1
+// ];
+       Job_Application__History hist = [
+            SELECT CreatedDate
+              FROM Job_Application__History
+             WHERE ParentId = :ja.Id
+               AND Field    = 'Follow_Up_Date__c'
+             ORDER BY CreatedDate DESC
+             LIMIT 1
+        ];
+        Datetime oldDate = hist.CreatedDate.addDays(31);
         StaleJobAppSchedule.overrideNow = oldDate;
         Test.startTest();
          new StaleJobAppSchedule().execute(null);

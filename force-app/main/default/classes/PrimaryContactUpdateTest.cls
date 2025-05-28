@@ -47,7 +47,7 @@ public with sharing class PrimaryContactUpdateTest {
         }
         insert contacts;
         
-        List<Job_Application__c> updateJobAppsWithContact = [SELECT Id, description__c, Primary_Contact__c FROM Job_Application__c WHERE Id IN :jobApps];
+        List<Job_Application__c> updateJobAppsWithContact = [SELECT Id, description__c, Primary_Contact__c,Job_Application__c.CompanyName__c FROM Job_Application__c WHERE Id IN :jobApps];
         for (Job_Application__c jobApp : updateJobAppsWithContact) {
             jobApp.description__c ='Test';
         }
@@ -77,7 +77,7 @@ public with sharing class PrimaryContactUpdateTest {
         accContacts.add(new Contact(FirstName = 'Account', LastName = 'Contact', AccountId = acc.Id));
         insert accContacts;
         
-        List<Job_Application__c> JobAppsWithAccountContact = [SELECT Id, Salary__c, Primary_Contact__c FROM Job_Application__c WHERE Id IN :jobApps];
+        List<Job_Application__c> JobAppsWithAccountContact = [SELECT Id, Salary__c, Primary_Contact__c,Job_Application__c.CompanyName__c FROM Job_Application__c WHERE Id IN :jobApps];
         for (Job_Application__c jobApp : JobAppsWithAccountContact ) {
             jobApp.description__c ='Test';
         }
@@ -111,7 +111,7 @@ public with sharing class PrimaryContactUpdateTest {
         insert contact;
         Id jaId = JobApps[0].Id;
 
-        List<Job_Application__c> JobAppsWithBothContact = [SELECT Id, Salary__c, Primary_Contact__c FROM Job_Application__c WHERE Id = :jaId];
+        List<Job_Application__c> JobAppsWithBothContact = [SELECT Id, Salary__c, Primary_Contact__c,Job_Application__c.CompanyName__c FROM Job_Application__c WHERE Id = :jaId];
         for (Job_Application__c jobApp : JobAppsWithBothContact ) {
             jobApp.Salary__c = 100000;
         }
