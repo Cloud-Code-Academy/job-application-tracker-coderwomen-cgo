@@ -67,6 +67,20 @@ public class FollowupFieldUpdateTest {
 
     @isTest
     static void testUpdatedJobAppWithSavedStatus(){
-        
+         List <Job_Application__c> newJobApps = new List<Job_Application__c>();
+        for(integer i = 0; i < 2; i++){
+            newJobApps.add(new Job_Application__c());
+        }
+        insert newJobApps;
+
+        newJobApps[0].notes__c = 'Test';
+        update newJobApps[0];
+
+        Test.startTest();
+        FollowupFieldUpdate.updateFollowupField(newJobApps);
+        Test.stopTest();
+
+        system.Assert.areEqual(null, newJobApps[0].Follow_up_Date__c);
+
     }
 }

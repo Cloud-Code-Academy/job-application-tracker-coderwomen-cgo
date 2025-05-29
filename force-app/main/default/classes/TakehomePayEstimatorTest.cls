@@ -48,13 +48,13 @@ public class TakehomePayEstimatorTest {
 
 
         Job_Application__c withSal = testJobApps[0];
-        system.assertNotEquals(null, withSal.Federal_Income_Tax__c);
-        system.assertNotEquals(null, withSal.Social_Security__c);
-        system.assertNotEquals(null, withSal.Medicare_Withholding__c);
-        system.assertNotEquals(null, withSal.Yearly_Take_home_Pay__c);
-        system.assertNotEquals(null, withSal.Monthly_Take_home_Pay__c);
-        system.assertNotEquals(null, withSal.Bi_annual_Pay__c);
-        system.assertNotEquals(null, withSal.Bi_weekly_Pay__c);
+        system.assertNotEquals(null, withSal.Federal_Income_Tax__c, 'Field must have a value');
+        system.assertNotEquals(null, withSal.Social_Security__c,'Field must have a value');
+        system.assertNotEquals(null, withSal.Medicare_Withholding__c, 'Field must have a value');
+        system.assertNotEquals(null, withSal.Yearly_Take_home_Pay__c, 'Field must have a value');
+        system.assertNotEquals(null, withSal.Monthly_Take_home_Pay__c, 'Field must have a value');
+        system.assertNotEquals(null, withSal.Bi_annual_Pay__c, 'Field must have a value');
+        system.assertNotEquals(null, withSal.Bi_weekly_Pay__c, 'Field must have a value');
     }
     
     @isTest
@@ -68,13 +68,13 @@ public class TakehomePayEstimatorTest {
 
 
         Job_Application__c withSal = testJobApps[0];
-        system.assertEquals(null, withSal.Federal_Income_Tax__c);
-        system.assertEquals(null, withSal.Social_Security__c);
-        system.assertEquals(null, withSal.Medicare_Withholding__c);
-        system.assertEquals(null, withSal.Yearly_Take_home_Pay__c);
-        system.assertEquals(null, withSal.Monthly_Take_home_Pay__c);
-        system.assertEquals(null, withSal.Bi_annual_Pay__c);
-        system.assertEquals(null, withSal.Bi_weekly_Pay__c);
+        system.assertEquals(null, withSal.Federal_Income_Tax__c, 'Field must have a value');
+        system.assertEquals(null, withSal.Social_Security__c, 'Field must have a value');
+        system.assertEquals(null, withSal.Medicare_Withholding__c, 'Field must have a value');
+        system.assertEquals(null, withSal.Yearly_Take_home_Pay__c, 'Field must have a value');
+        system.assertEquals(null, withSal.Monthly_Take_home_Pay__c, 'Field must have a value');
+        system.assertEquals(null, withSal.Bi_annual_Pay__c, 'Field must have a value');
+        system.assertEquals(null, withSal.Bi_weekly_Pay__c, 'Field must have a value');
     }
 
     @isTest
@@ -95,13 +95,13 @@ public class TakehomePayEstimatorTest {
         Test.stopTest();
 
         Job_Application__c withSalary = updatedJobApp[0];
-        system.assertNotEquals(null, withSalary.Federal_Income_Tax__c);
-        system.assertNotEquals(null, withSalary.Social_Security__c);
-        system.assertNotEquals(null, withSalary.Medicare_Withholding__c);
-        system.assertNotEquals(null, withSalary.Yearly_Take_home_Pay__c);
-        system.assertNotEquals(null, withSalary.Monthly_Take_home_Pay__c);
-        system.assertNotEquals(null, withSalary.Bi_annual_Pay__c);
-        system.assertNotEquals(null, withSalary.Bi_weekly_Pay__c);
+        system.assertNotEquals(null, withSalary.Federal_Income_Tax__c, 'Field must have a value');
+        system.assertNotEquals(null, withSalary.Social_Security__c, 'Field must have a value');
+        system.assertNotEquals(null, withSalary.Medicare_Withholding__c, 'Field must have a value');
+        system.assertNotEquals(null, withSalary.Yearly_Take_home_Pay__c, 'Field must have a value');
+        system.assertNotEquals(null, withSalary.Monthly_Take_home_Pay__c, 'Field must have a value');
+        system.assertNotEquals(null, withSalary.Bi_annual_Pay__c, 'Field must have a value');
+        system.assertNotEquals(null, withSalary.Bi_weekly_Pay__c, 'Field must have a value');
     }
 
     @isTest
@@ -122,8 +122,14 @@ public class TakehomePayEstimatorTest {
         Test.stopTest();
 
         Job_Application__c withSalary = updatedSalaryApp[0];
-        system.assertNotEquals(testJobApps[0].Salary__c, withSalary.Federal_Income_Tax__c);
-        system.assertNotEquals(testJobApps[0].Federal_Income_Tax__c, withSalary.Federal_Income_Tax__c);
+        
+        system.assertNotEquals(testJobApps[0].Federal_Income_Tax__c, withSalary.Federal_Income_Tax__c, 'Federal Tax Amount should be updated');
+        system.assertNotEquals(testJobApps[0].Social_Security__c, withSalary.Federal_Income_Tax__c, 'Federal Tax Amount should be updated');
+        system.assertNotEquals(testJobApps[0].Medicare_Withholding__c, withSalary.Federal_Income_Tax__c, 'Federal Tax Amount should be updated');
+        system.assertNotEquals(testJobApps[0].Bi_annual_Pay__c, withSalary.Federal_Income_Tax__c, 'Federal Tax Amount should be updated');
+        system.assertNotEquals(testJobApps[0].Yearly_Take_home_Pay__c, withSalary.Federal_Income_Tax__c, 'Federal Tax Amount should be updated');
+        system.assertNotEquals(testJobApps[0].Bi_weekly_Pay__c, withSalary.Federal_Income_Tax__c, 'Federal Tax Amount should be updated');
+        system.assertNotEquals(testJobApps[0].Monthly_Take_home_Pay__c, withSalary.Federal_Income_Tax__c, 'Federal Tax Amount should be updated');
         
     }
 

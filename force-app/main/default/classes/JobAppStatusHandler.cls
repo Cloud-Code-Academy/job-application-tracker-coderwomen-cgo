@@ -36,7 +36,7 @@ public with sharing class JobAppStatusHandler{
                              Subject='Set up weekly networking calls to explore similar companies/roles')
                 });
                 }  else if (Status == 'Interviewing') {
-                Integer dayOffset = 4;
+                
                 tasksToInsert.addAll(new List<Task>{
                     new Task(Status='Not Started', WhatId=ja.Id, ActivityDate=date.today() + 4,
                              Subject='Prepare your blurb or “tell me about yourself” response'),
@@ -51,7 +51,6 @@ public with sharing class JobAppStatusHandler{
                 });
             }
             else if (Status == 'Negotiating') {
-                Integer dayOffset = 5;
                 tasksToInsert.addAll(new List<Task>{
                     new Task(Status='Not Started', WhatId=ja.Id, ActivityDate=date.today() + 5,
                              Subject='Research your market value and know your numbers'),
@@ -62,7 +61,7 @@ public with sharing class JobAppStatusHandler{
                 });
             }
             else if (Status == 'Accepted') {
-                Integer dayOffset = 6;
+                
                 tasksToInsert.addAll(new List<Task>{
                     new Task(Status='Not Started', WhatId=ja.Id, ActivityDate=date.today() + 6,
                              Subject='Plan your resignation if applicable'),
@@ -73,7 +72,7 @@ public with sharing class JobAppStatusHandler{
                 });
             }
             else if (Status == 'Closed') {
-                Integer dayOffset = 1;
+                
                 tasksToInsert.addAll(new List<Task>{
                     new Task(Status='Not Started', WhatId=ja.Id, ActivityDate=date.today() + 1,
                              Subject='Send a follow-up email thanking the interviewer and asking for feedback'),

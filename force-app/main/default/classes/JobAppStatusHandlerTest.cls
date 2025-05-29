@@ -46,7 +46,7 @@ public with sharing class JobAppStatusHandlerTest {
         List<Job_Application__c> jobApps = new List<Job_Application__c>();
         insert jobApps;
         Test.startTest();
-       JobAppStatusHandler.createTasksForStatus(jobApps,null);
+        JobAppStatusHandler.createTasksForStatus(jobApps,null);
         Test.stopTest();
 
         List<Task> savedTasks = [SELECT Id FROM Task WHERE WhatId IN :jobApps];
@@ -69,6 +69,69 @@ public with sharing class JobAppStatusHandlerTest {
 
         List<Task> tasks = [SELECT Id FROM Task WHERE WhatId IN :jobApps];
         System.assertEquals(6, tasks.size(), 'There should be only 6 tasks');
+    }
+
+    @isTest
+    static void testCreateTaskRecordsApplied() {
+        List<Job_Application__c> newJobs = new List<Job_Application__c>();
+        for (Integer i = 0; i < 2; i++) {
+           newJobs.add(new Job_Application__c());
+        }
+        insert newJobs;
+        
+        Map<Id, Job_Application__c> oldJobApps = new Map<Id, Job_Application__c>(newJobs);
+
+        Test.startTest();
+        for(Job_Application__c  ja: newJobs){
+            ja.Status__c = 'Applied';
+        }
+        update NewJobs;
+        Test.stopTest();
+        
+        List<Task> tasks = [SELECT Id, WhatId FROM Task WHERE WhatId IN :newJobs];
+        System.assertEquals(14, tasks.size(), 'Expected 14 task Records');
+    }
+
+    @isTest
+    static void testCreateTaskRecordsInterviewing() {
+        List<Job_Application__c> newJobs = new List<Job_Application__c>();
+        for (Integer i = 0; i < 2; i++) {
+           newJobs.add(new Job_Application__c());
+        }
+        insert newJobs;
+        
+        Map<Id, Job_Application__c> oldJobApps = new Map<Id, Job_Application__c>(newJobs);
+
+        Test.startTest();
+        for(Job_Application__c  ja: newJobs){
+            ja.Status__c = 'Interviewing';
+        }
+        update NewJobs;
+        Test.stopTest();
+        
+        List<Task> tasks = [SELECT Id, WhatId FROM Task WHERE WhatId IN :newJobs];
+        System.assertEquals(16, tasks.size(), 'Expected 16 task Records');
+    }
+
+    @isTest
+    static void testCreateTaskRecordsNegotiating() {
+        List<Job_Application__c> newJobs = new List<Job_Application__c>();
+        for (Integer i = 0; i < 2; i++) {
+           newJobs.add(new Job_Application__c());
+        }
+        insert newJobs;
+        
+        Map<Id, Job_Application__c> oldJobApps = new Map<Id, Job_Application__c>(newJobs);
+
+        Test.startTest();
+        for(Job_Application__c  ja: newJobs){
+            ja.Status__c = 'Negotiating';
+        }
+        update NewJobs;
+        Test.stopTest();
+        
+        List<Task> tasks = [SELECT Id, WhatId FROM Task WHERE WhatId IN :newJobs];
+        System.assertEquals(12, tasks.size(), 'Expected 12 task Records');
     }
  
 
