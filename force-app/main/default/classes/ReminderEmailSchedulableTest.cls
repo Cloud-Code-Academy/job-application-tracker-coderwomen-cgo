@@ -1,5 +1,5 @@
 
-@isTest(SeeAllData=true)
+@isTest
 private class ReminderEmailSchedulableTest {
 
     @IsTest
@@ -16,8 +16,6 @@ static void testInterviewAtCorrectTime(){
     Event newEv2 = new Event(Subject = 'Interview tomorrow', WhoId = conIntvwr.Id, StartDateTime = eventTime.addMinutes(75), DurationInMinutes = 60, OwnerId = UserInfo.getUserId()
     ); 
     insert new List<Event> {newEv, newEv2};
-
-    Id templateId = [SELECT Id FROM EmailTemplate WHERE DeveloperName = 'Interview_Day_Before_Reminder' LIMIT 1].Id;
 
 Test.startTest();
     String jobId = System.schedule(

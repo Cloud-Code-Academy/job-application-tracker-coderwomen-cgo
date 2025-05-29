@@ -24,12 +24,8 @@ public class ReminderEmailBatchTest {
         // Query the test user we created in @testSetup
         User testUser = [SELECT Id FROM User WHERE Email = 'testuser@example.com' LIMIT 1];
 
-        // Query the EmailTemplate (must exist in org)
-        EmailTemplate template = [
-            SELECT Id FROM EmailTemplate 
-            WHERE DeveloperName = 'Interview_Day_Before_Reminder' 
-            LIMIT 1
-        ];
+        Job_Application__c job = new Job_Application__c(Name = 'Salesforce Admin');
+        insert job;
 
         // Insert events that match the batch filter: 24h ± 30m from now, subject includes 'Interview'
         DateTime eventTime = DateTime.now().addHours(24);
@@ -37,6 +33,7 @@ public class ReminderEmailBatchTest {
         for (Integer i = 0; i < 5; i++) {
             events.add(new Event(
                 OwnerId = testUser.Id,
+                Job_Application__c = job.Id,
                 StartDateTime = eventTime.addHours(i),
                 DurationInMinutes = 30, 
                 Subject = 'Interview with Candidate ' + i
