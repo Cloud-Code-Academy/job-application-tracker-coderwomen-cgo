@@ -3,7 +3,7 @@ public with sharing class EventValidatorHandler {
     public static void validateInterviewTimeConflicts(List<Event> newEvents) {
         System.debug('New Event Records: ' + newEvents);
 
-        // Collect all interview events from the input list that have valid fields
+        // Collect all interview events from the input list and get a set of unique Ids.
         List<Event> newInterviewEvents = new List<Event>();
         Set<Id> userIdsWithNewEvents = new Set<Id>();
 
@@ -26,7 +26,7 @@ public with sharing class EventValidatorHandler {
 
         System.debug('Qualified Interview Events for Validation: ' + newInterviewEvents);
 
-        // Query existing interview events in the org (excluding the ones being inserted or updated)
+        // Are there existing interview events in the org?
         Map<Id, List<Event>> existingInterviewEventsByUser = new Map<Id, List<Event>>();
 
         if (!userIdsWithNewEvents.isEmpty()) {
@@ -43,8 +43,6 @@ public with sharing class EventValidatorHandler {
                 }
                 existingInterviewEventsByUser.get(existing.OwnerId).add(existing);
             }
-
-            System.debug('Grouped Existing Events by User: ' + existingInterviewEventsByUser);
         }
 
         // Overlap between new and existing?
@@ -53,10 +51,7 @@ public with sharing class EventValidatorHandler {
 
             if (existingEventsForUser != null) {
                 for (Event existingEvent : existingEventsForUser) {
-                    System.debug('Existing Event/s start time: ' + existingEvent.StartDateTime);
-                    System.debug('Existing Event/s End time: ' + existingEvent.EndDateTime);
-                    System.debug('New Event/s start time: ' + newEvent.StartDateTime);
-                    System.debug('New Event/s End time: ' + newEvent.EndDateTime);
+
                     Boolean isOverlapping =
                         newEvent.StartDateTime < existingEvent.EndDateTime &&
                         newEvent.EndDateTime > existingEvent.StartDateTime;
@@ -69,7 +64,7 @@ public with sharing class EventValidatorHandler {
             }
         }
 
-        // new interview events in the same batch
+        // New interview events in the same batch
         for (Integer i = 0; i < newInterviewEvents.size(); i++) {
             Event firstEvent = newInterviewEvents[i];
 

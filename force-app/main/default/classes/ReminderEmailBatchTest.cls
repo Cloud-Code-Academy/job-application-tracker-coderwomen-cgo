@@ -3,7 +3,7 @@ public class ReminderEmailBatchTest {
 
     @testSetup
     static void setupData() {
-        // Insert test user
+        // Standard test user
         Profile standardUser = [SELECT Id FROM Profile WHERE Name = 'Standard User' LIMIT 1];
         User testUser = new User(
             Alias = 'testuser',
@@ -21,13 +21,13 @@ public class ReminderEmailBatchTest {
 
     @isTest
     static void testBatchExecutes() {
-        // Query the test user we created in @testSetup
+        
         User testUser = [SELECT Id FROM User WHERE Email = 'testuser@example.com' LIMIT 1];
 
         Job_Application__c job = new Job_Application__c(Name = 'Salesforce Admin');
         insert job;
 
-        // Insert events that match the batch filter: 24h ± 30m from now, subject includes 'Interview'
+        
         DateTime eventTime = DateTime.now().addHours(24);
         List<Event> events = new List<Event>();
         for (Integer i = 0; i < 5; i++) {
@@ -41,7 +41,6 @@ public class ReminderEmailBatchTest {
         }
         insert events;
 
-        // Execute the batch
         Test.startTest();
         ReminderEmailBatch batch = new ReminderEmailBatch();
         Database.executeBatch(batch, 5);
@@ -52,7 +51,7 @@ public class ReminderEmailBatchTest {
 
     @isTest
     static void testNoOwnerIds() {
-        // Event with null OwnerId
+    
         DateTime eventTime = DateTime.now().addHours(24);
         insert new Event(
             StartDateTime = eventTime,
@@ -72,7 +71,7 @@ public class ReminderEmailBatchTest {
         Profile p = [SELECT Id FROM Profile WHERE Name = 'Standard User' LIMIT 1];
         User fakeUser = new User(
             Alias = 'fakeuser',
-            Email = 'test@invalid.com', // Valid format, but ignored by SOQL filter
+            Email = 'test@invalid.com', 
             EmailEncodingKey = 'UTF-8',
             LastName = 'Fake',
             LanguageLocaleKey = 'en_US',

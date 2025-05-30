@@ -15,7 +15,6 @@ private class AccountCreationHelperTest {
         System.assertEquals(1, result.size(), 'Right count of Accts created.');
         System.assertEquals(acc.Id, result.get('ExistCo').Id, 'Correct Id returned.');
         
-        // Ensure no duplicate accounts
         Integer count = [SELECT COUNT() FROM Account WHERE Name = 'ExistCo'];
         System.assertEquals(1, count, 'Should not create a duplicate');
     }

@@ -41,7 +41,6 @@ public class EventValidatorHandlerTest {
         EventValidatorHandler.validateInterviewTimeConflicts(new List<Event>{ev1, ev2});
         Test.stopTest();
 
-        // No error expected
         System.assert(true, 'No overlapping errors should be thrown.');
     }
 

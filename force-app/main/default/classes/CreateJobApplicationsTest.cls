@@ -32,7 +32,6 @@ private class CreateJobApplicationsTest {
         System.assertEquals('70,000 USD', job.Salary_Display__c, 'Salary display value stored correctly');
         System.assertNotEquals(null, job.CompanyName__c, 'CompanyName__c lookup should be populated');
 
-        // Confirm the linked Account exists and is correct
         List<Account> accs = [SELECT Id, Name FROM Account WHERE Name = :companyName];
         System.assertEquals(1, accs.size(), 'One Account should be created or matched');
         System.assertEquals(accs[0].Id, job.CompanyName__c, 'Job application should link to correct Account');
