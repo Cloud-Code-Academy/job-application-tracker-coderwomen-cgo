@@ -67,7 +67,7 @@ static void testOverlapWithinSameBatch() {
     Test.startTest();
     try {
         EventValidatorHandler.validateInterviewTimeConflicts(new List<Event>{e1, e2});
-        insert new List<Event>{e1, e2}; // This is where the error will surface
+        insert new List<Event>{e1, e2}; 
         System.assert(false, 'Expected DML exception due to overlapping events');
     } catch (DmlException ex) {
         System.assert(ex.getMessage().contains('scheduled during this time'), 'Expected overlap error');
@@ -80,7 +80,7 @@ static void testOverlapWithinSameBatch() {
             User u = createTestUser();
             DateTime base = DateTime.now().addDays(1);
 
-            // Insert existing interview event
+
             Event existing = new Event(
                 Subject = 'Interview with Client X',
                 OwnerId = u.Id,
@@ -89,7 +89,7 @@ static void testOverlapWithinSameBatch() {
             );
             insert existing;
 
-            // Incoming new event that overlaps
+        
             Event incoming = new Event(
                 Subject = 'Interview with Client Y',
                 OwnerId = u.Id,
@@ -100,11 +100,46 @@ static void testOverlapWithinSameBatch() {
             Test.startTest();
             try {
                 EventValidatorHandler.validateInterviewTimeConflicts(new List<Event>{incoming});
-                insert incoming; // <-- this triggers the addError to throw
+                insert incoming;
                 System.assert(false, 'Expected DML exception due to validation error');
             } catch (DmlException ex) {
                 System.assert(ex.getMessage().contains('existing events'), 'Expected error for overlap with existing');
             }
             Test.stopTest();
         }
+
+        @isTest
+        static void testDurationFallbackWhenEndDateTimeNull() {
+            User user = createTestUser();
+            DateTime start = DateTime.now().addDays(2);
+
+            Event e = new Event(
+                Subject = 'Interview with Candidate Z',
+                OwnerId = user.Id,
+                StartDateTime = start,
+                DurationInMinutes = 30,
+                EndDateTime = null 
+            );
+
+            Test.startTest();
+            EventValidatorHandler.validateInterviewTimeConflicts(new List<Event>{ e });
+            Test.stopTest();
+
+            System.assertNotEquals(null, e.EndDateTime, 'EndDateTime should be derived from DurationInMinutes');
+    }
+    @isTest
+    static void testEventSkippedDueToMissingFields() {
+        Event e = new Event(
+            Subject = null, 
+            OwnerId = null, 
+            StartDateTime = null,
+            EndDateTime = null
+        );
+
+        Test.startTest();
+        EventValidatorHandler.validateInterviewTimeConflicts(new List<Event>{ e });
+        Test.stopTest();
+
+        System.assertEquals(0, e.getErrors().size(), 'Skipped event should not throw errors');
+    }
 }

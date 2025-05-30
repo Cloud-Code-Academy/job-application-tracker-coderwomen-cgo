@@ -2,3 +2,26 @@
     width: 100% !important;
     max-width: 100% !important;
 }
+
+.blue-card-content {
+    background-color: #e6f2ff;
+    padding: 1rem;
+    border-radius: 0.25rem;
+}
+
+.custom-label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 0.2rem;
+}
+
+.custom-output {
+    margin-bottom: 1rem;
+}
+
+
+.custom-value {
+    padding-left: 0.25rem;
+    font-size: 0.95rem;
+}
+
