@@ -2,7 +2,7 @@ trigger JobAppStatusTrigger on Job_Application__c (before insert,before update,a
      
     if (Trigger.isbefore &&  Trigger.isUpdate) {
        PrimaryContactUpdate.primaryContactFieldUpdate(Trigger.new);
-       FollowupFieldUpdate.updateFollowupField(Trigger.new);
+       FollowupFieldUpdate.updateFollowupField(Trigger.new,Trigger.oldMap);
     }
     
     if (Trigger.isAfter) {

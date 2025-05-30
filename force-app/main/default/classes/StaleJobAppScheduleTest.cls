@@ -20,94 +20,32 @@
  * See the Apex Language Reference for more information about Testing and Code Coverage.
  */
 //
-//no Follow_Up_Date__c history records older than 30 days
-//follow-up was “reset” to 31 days ago (stale → should close)
-//recent follow-up (not stale → should stay Open)
-//Application already Accepted (even if stale → should stay Accepted)
+
 @isTest
 public class StaleJobAppScheduleTest{
-
-    @isTest
-    static void testNoHistoryToClose() {
-       Job_Application__c ja = new Job_Application__c(
-            Salary__c = 100000     
-        );
-        insert ja;
-
-        Test.startTest();
-         new StaleJobAppSchedule().execute(null);
-        Test.stopTest();
-
-        ja = [SELECT Status__c FROM Job_Application__c WHERE Id = :ja.Id];
-        System.assertEquals(
-            'SAVED',
-            ja.Status__c,
-            'With no old history entries, nothing should close.'
-        );
-    }
-
-    @isTest
-    static void testRecentStaleJobApp() {
-        Job_Application__c ja = new Job_Application__c(
-            Salary__c = 100000     
-        );
-        insert ja;
-        ja.Status__c = 'Applying';
-        update ja;
-
-        Test.startTest();
-         new StaleJobAppSchedule().execute(null);
-        Test.stopTest();
-
-        ja = [SELECT Status__c FROM Job_Application__c WHERE Id = :ja.Id];
-        System.assertEquals(
-            'APPLYING',
-            ja.Status__c,
-            'With just a recent history entry, application should not  close.'
-        );
-    }
-
-    @isTest
-    static void testStaleJobApp() {
-        Job_Application__c ja = new Job_Application__c(
-            Salary__c = 100000  
-        );
-        insert ja;
-      ja.Status__c = 'Applying';
-      ja.Follow_Up_Date__c = Date.today().addDays(2);
-        update ja;
-      ja.Salary__c = 120000;
-       ja.Follow_Up_Date__c = Date.today().addDays(4);
-       update ja; 
-    
-//       Job_Application__History staleJobs = [
-//     SELECT ParentId, CreatedDate
-//       FROM Job_Application__History
-//      WHERE ParentId = :ja.Id
-//         AND  Field = 'Follow_Up_Date__c'
-//          ORDER BY CreatedDate DESC
-//         LIMIT 1
-// ];
-       Job_Application__History hist = [
-            SELECT CreatedDate
-              FROM Job_Application__History
-             WHERE ParentId = :ja.Id
-               AND Field    = 'Follow_Up_Date__c'
-             ORDER BY CreatedDate DESC
-             LIMIT 1
-        ];
-        Datetime oldDate = hist.CreatedDate.addDays(31);
-        StaleJobAppSchedule.overrideNow = oldDate;
-        Test.startTest();
-         new StaleJobAppSchedule().execute(null);
-        Test.stopTest();
-
-        ja = [SELECT Status__c FROM Job_Application__c WHERE Id = :ja.Id];
-        System.assertEquals(
-            'CLOSED',
-            ja.Status__c,
-            'FOLLOW UP ATE OLDER THAN 30 DAYS, application should close.');
-    }
-
+    @isTest 
+    static void testScheduledJobRunsBatch() {
+        Job_Application__c schedApp = new Job_Application__c( Name ='Sched-App');
+        insert schedApp;
+        schedApp.Status__c = 'Applied';
+        update schedApp;
+        schedApp.Follow_up_Date__c = Date.today().addDays(-31);
+        update schedApp;
         
+        Test.startTest();
+            String jobId = System.schedule(
+                'Test StaleJobAppSchedule',
+                 '0 0 12 * * ?',
+                new StaleJobAppSchedule()
+            );
+        Test.stopTest();
+        List<Job_Application__c> updatedApps = [SELECT Id, Name,Follow_up_Date__c,Status__c,Notes__c FROM Job_Application__c WHERE Id = :schedApp.ID];
+        
+        System.assertNotEquals(null, jobId, 'Scheduled job should return a job ID.');
+        System.assertEquals('CLOSED', updatedApps[0].Status__c, 'status should be set to closed');
+        System.assert(
+            updatedApps[0].Notes__c.contains('job application was closed by an automated process'),
+            'Scheduled run should append automated note'
+        );
+    }
 }
