@@ -25,27 +25,50 @@
 public class StaleJobAppScheduleTest{
     @isTest 
     static void testScheduledJobRunsBatch() {
-        Job_Application__c schedApp = new Job_Application__c( Name ='Sched-App');
-        insert schedApp;
-        schedApp.Status__c = 'Applied';
-        update schedApp;
-        schedApp.Follow_up_Date__c = Date.today().addDays(-31);
-        update schedApp;
+        List<Job_Application__c> apps = new List<Job_Application__c>{
+            // stale & eligible (older than 30 days, status ≠ Closed/Accepted)
+            new Job_Application__c(
+                Name='App-Stale'
+            ),
+            // not stale (only 10 days old)
+            new Job_Application__c(
+                Name='App-Fresh'
+            ),
+            // stale but already Closed (should be skipped)
+            new Job_Application__c(
+                Name='App-AlreadyClosed'
+            )
+        };
+        insert apps;
+       
+        job_Application__C ja1 = [SELECT Id,Name,Status__c,Notes__c FROM Job_Application__c WHERE Name = 'App-Stale' LIMIT 1];
+        ja1.Status__c = 'Applying';
+        update ja1;
+        ja1.Follow_up_Date__c = Date.today().addDays(-31);
+        update ja1;
+        job_Application__C ja2 = [SELECT Id,Name,Status__c,Notes__c FROM Job_Application__c WHERE Name = 'App-AlreadyClosed' LIMIT 1];
+        ja2.Status__c = 'Closed';
+        update ja2;
         
         Test.startTest();
+        StaleJobAppSchedule stalejobs = new StaleJobAppSchedule(); 
             String jobId = System.schedule(
                 'Test StaleJobAppSchedule',
                  '0 0 12 * * ?',
-                new StaleJobAppSchedule()
+                stalejobs
             );
+            stalejobs.execute(null);
         Test.stopTest();
-        List<Job_Application__c> updatedApps = [SELECT Id, Name,Follow_up_Date__c,Status__c,Notes__c FROM Job_Application__c WHERE Id = :schedApp.ID];
+          //stalejobs.execute(null);
+         Job_Application__c staleApp       = [SELECT Status__c, Notes__c FROM Job_Application__c WHERE Name='App-Stale'];
+        Job_Application__c freshApp       = [SELECT Status__c, Notes__c FROM Job_Application__c WHERE Name='App-Fresh'];
+        Job_Application__c alreadyClosed  = [SELECT Status__c, Notes__c FROM Job_Application__c WHERE Name='App-AlreadyClosed'];
         
         System.assertNotEquals(null, jobId, 'Scheduled job should return a job ID.');
-        System.assertEquals('CLOSED', updatedApps[0].Status__c, 'status should be set to closed');
-        System.assert(
-            updatedApps[0].Notes__c.contains('job application was closed by an automated process'),
-            'Scheduled run should append automated note'
+        System.assertEquals('CLOSED', staleApp.Status__c, 'status should be set to closed');
+        System.assert(staleApp.Notes__c.contains('Closed by automated process on'),
+            'Expected automated close note'
         );
+        System.assertEquals(null, alreadyClosed.Notes__c, 'automated process should not append note');
     }
 }

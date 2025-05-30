@@ -1,5 +1,6 @@
 public with sharing class StaleJobAppSchedule implements Schedulable {
-    public static void execute(SchedulableContext sc) {
-       Database.executeBatch(new StaleJobAppBatch(), 200);
+    public void execute(SchedulableContext sc) {
+        StaleJobAppBatch batch = new StaleJobAppBatch(); 
+       Database.executeBatch(batch, 200);
     }
 }
