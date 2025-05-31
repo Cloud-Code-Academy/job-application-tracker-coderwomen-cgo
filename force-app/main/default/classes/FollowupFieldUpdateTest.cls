@@ -35,7 +35,7 @@ public class FollowupFieldUpdateTest {
         insert newJobApps;
 
         Test.startTest();
-        FollowupFieldUpdate.updateFollowupField(newJobApps);
+        FollowupFieldUpdate.updateFollowupField(newJobApps,null);
         Test.stopTest();
 
         system.Assert.areEqual(null, newJobApps[0].Follow_up_Date__c);
@@ -45,24 +45,25 @@ public class FollowupFieldUpdateTest {
     //when job application is changed to Applied, follow up date should populate
     @isTest
     static void testAppliedJobApplication() {
-        Date preDate = Date.today().addDays(4);
+        // Date preDate = Date.today().addDays(4);
         List <Job_Application__c> newJobApps = new List<Job_Application__c>();
         for(integer i = 0; i < 2; i++){
             newJobApps.add(new Job_Application__c());
         }
         insert newJobApps;
+        Map<Id, Job_Application__c> oldJobApps = new Map<Id, Job_Application__c>(newJobApps);
     
         newjobApps[0].Status__c = 'Applied';
-        update newJobApps[0];
         newJobApps[1].Status__c = 'Interviewing';
-        update newJobApps[1];
 
         Test.startTest();
-        FollowupFieldUpdate.updateFollowupField(newJobApps);
+        update newJobApps[0];
+        update newJobApps[1];
         Test.stopTest();
+         List<Job_Application__c> updated = [SELECT Status__c, Follow_up_Date__c FROM Job_Application__c WHERE Id IN :newJobApps];
 
-            system.Assert.areEqual(preDate, newJobApps[0].Follow_up_Date__c);
-            system.Assert.areEqual(preDate, newJobApps[1].Follow_up_Date__c);
+            system.Assert.areEqual(Date.today().addDays(4), updated[0].Follow_up_Date__c);
+            system.Assert.areEqual(Date.today().addDays(4), updated[1].Follow_up_Date__c);
     }
 
     @isTest
@@ -72,12 +73,13 @@ public class FollowupFieldUpdateTest {
             newJobApps.add(new Job_Application__c());
         }
         insert newJobApps;
+        Map<Id, Job_Application__c> oldJobApps = new Map<Id, Job_Application__c>(newJobApps);
 
         newJobApps[0].notes__c = 'Test';
         update newJobApps[0];
 
         Test.startTest();
-        FollowupFieldUpdate.updateFollowupField(newJobApps);
+        FollowupFieldUpdate.updateFollowupField(newJobApps,oldJobApps);
         Test.stopTest();
 
         system.Assert.areEqual(null, newJobApps[0].Follow_up_Date__c);

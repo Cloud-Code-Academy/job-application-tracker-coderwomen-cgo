@@ -1,9 +1,5 @@
 @isTest
 public with sharing class PrimaryContactUpdateTest {
-  //test for no contacts
-  //test for account with contacts and no direct contact
-  //testfor directcontact and no account contact
-  //test for account with contacts and direct contact
     @isTest
     static void testNoContacts() {
         List<Job_Application__c> jobApps = new List<Job_Application__c>();
