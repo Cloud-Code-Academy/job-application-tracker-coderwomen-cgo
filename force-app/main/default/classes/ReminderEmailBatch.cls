@@ -25,9 +25,14 @@ public class ReminderEmailBatch implements Database.Batchable<SObject>, Database
         System.debug('Number of Events in Scope: ' + events.size());
 
         Set<Id> ownerIds = new Set<Id>();
+        Set<Id> jobAppIds = new Set<Id>();
+        
         for (Event ev : events) {
             if (ev.OwnerId != null && ev.OwnerId.getSObjectType() == User.SObjectType) {
                 ownerIds.add(ev.OwnerId);
+            }
+            if (ev.WhatId != null && String.valueOf(ev.WhatId).startsWith('a00')) { // a00 = prefix for Job_Application__c
+                jobAppIds.add(ev.WhatId);   
             }
         }
 
@@ -38,18 +43,23 @@ public class ReminderEmailBatch implements Database.Batchable<SObject>, Database
                 FROM User 
                 WHERE Id IN :ownerIds AND Email != null
             ]);
-            System.debug('Resolved User Emails: ' + users.keySet());
         }
-
+        
+        Map<Id, Job_Application__c> jobAppMap = new Map<Id, Job_Application__c>();
+            if (!jobAppIds.isEmpty()) {
+                jobAppMap = new Map<Id, Job_Application__c>(
+                    [SELECT Id, Name FROM Job_Application__c WHERE Id IN :jobAppIds]
+            );
+        }        
         List<Messaging.SingleEmailMessage> batch = new List<Messaging.SingleEmailMessage>();
 
         for (Event event : events) {
             if (users.containsKey(event.OwnerId)) {
                 String jobName = '';
-                if (event.Job_Application__r != null) {
-                    jobName = event.Job_Application__r.Name;
-                }           
-                
+                if (event.WhatId != null && jobAppMap.containsKey(event.WhatId)) {
+                jobName = jobAppMap.get(event.WhatId).Name;
+                }                          
+        
                 String body = 'Get your dress shoes on and practice your speaking skills!<br/>' +
                             '<strong>For the job:</strong> ' + jobName + '<br/>' +
                             '<strong>At: </strong> ' +  ((DateTime)event.get('StartDateTime')).format();
@@ -62,7 +72,6 @@ public class ReminderEmailBatch implements Database.Batchable<SObject>, Database
                 batch.add(mail);
 
                 System.debug('Queued email for: ' + users.get(event.OwnerId).Email);
-
                 if (batch.size() == 10) {
                     Messaging.sendEmail(batch);
                     batch.clear();
@@ -74,9 +83,9 @@ public class ReminderEmailBatch implements Database.Batchable<SObject>, Database
         if (!batch.isEmpty()) {
             Messaging.sendEmail(batch);
         }
-    }
-
+    }    
     public void finish(Database.BatchableContext context) {
         System.debug('ReminderEmailBatch completed successfully.');
     }
 }
+

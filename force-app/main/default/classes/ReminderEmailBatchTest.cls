@@ -33,7 +33,7 @@ public class ReminderEmailBatchTest {
         for (Integer i = 0; i < 5; i++) {
             events.add(new Event(
                 OwnerId = testUser.Id,
-                Job_Application__c = job.Id,
+                WhatId = job.Id,
                 StartDateTime = eventTime.addHours(i),
                 DurationInMinutes = 30, 
                 Subject = 'Interview with Candidate ' + i
@@ -96,4 +96,27 @@ public class ReminderEmailBatchTest {
 
         System.assert(true, 'User with ignored email skipped cleanly');
     }
+        @isTest
+        static void testWhatId() {
+            User testUser = [SELECT Id FROM User WHERE Email = 'testuser@example.com' LIMIT 1];
+
+            Job_Application__c job = new Job_Application__c(Name = 'Salesforce Developer');
+            insert job;
+
+            DateTime eventTime = DateTime.now().addHours(24);
+            Event evt = new Event(
+                OwnerId = testUser.Id,
+                WhatId = job.Id, 
+                StartDateTime = eventTime,
+                DurationInMinutes = 30,
+                Subject = 'Interview using WhatId'
+            );
+            insert evt;
+
+            Test.startTest();
+            Database.executeBatch(new ReminderEmailBatch(), 5);
+            Test.stopTest();
+
+            System.assert(true, 'Event with WhatId processed successfully');
+        }
 }
