@@ -22,16 +22,8 @@
             </value>
         </inputParameters>
         <nameSegment>HttpRequestToJooble</nameSegment>
-        <offset>0</offset>
     </actionCalls>
     <apiVersion>63.0</apiVersion>
-    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
-    <customProperties>
-        <name>ScreenProgressIndicator</name>
-        <value>
-            <stringValue>{&quot;location&quot;:&quot;top&quot;,&quot;type&quot;:&quot;simple&quot;}</stringValue>
-        </value>
-    </customProperties>
     <environments>Default</environments>
     <interviewLabel>Get Jooble Jobs {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Get Jooble Jobs</label>
